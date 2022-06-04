@@ -1,8 +1,12 @@
 import Head from "next/head";
+
 import Header from "../components/Header";
 import Nav from "../components/Nav";
+import client from "../utils/client";
+import requsets from "../utils/requsets";
 
-export default function Home() {
+export default function Home(props) {
+  console.log(props);
   return (
     <div>
       <Head>
@@ -16,4 +20,18 @@ export default function Home() {
       <Nav />
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const genre = context.query.genre;
+
+  const request = await client.get(
+    requsets[genre]?.url || requsets.fetchTrending.url
+  );
+
+  return {
+    props: {
+      results: request.data,
+    },
+  };
 }
