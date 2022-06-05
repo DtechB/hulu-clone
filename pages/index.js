@@ -24,13 +24,13 @@ export default function Home({ results }) {
 export async function getServerSideProps(context) {
   const genre = context.query.genre;
 
-  const request = await client.get(
-    requsets[genre]?.url || requsets.fetchTrending.url
-  );
+  const request = await client
+    .get(requsets[genre]?.url || requsets.fetchTrending.url)
+    .catch((err) => console.log(err));
 
   return {
     props: {
-      results: request.data,
+      results: request?.data || null,
     },
   };
 }
